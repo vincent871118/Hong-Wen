@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>內容管理系統 (CMS) | 知識分子的隨筆</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">CMS 控制台</div>
+            <ul class="nav-links">
+                <li><a href="index.html">返回網站</a></li>
+                <li><a href="admin.html">會員管理</a></li>
+                <li><a href="cms.html" class="active">內容編輯</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="cms-access-denied" style="display:none; text-align:center; padding: 5rem;">
+            <h2>🚫 存取受限</h2>
+            <p>您不具備管理員權限，無法進入此系統。</p>
+            <a href="index.html" class="btn" style="margin-top: 1rem;">回首頁</a>
+        </div>
+
+        <div id="cms-main-container">
+            <section>
+                <h2>文章內容編輯器</h2>
+                <div class="form-group">
+                    <label for="article-select">選擇要編輯的文章</label>
+                    <select id="article-select" style="width: 100%; padding: 0.8rem; border-radius: 4px; border: 1px solid #ddd;">
+                        <option value="new">-- 新增文章 --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cms-title">文章標題</label>
+                    <input type="text" id="cms-title" placeholder="請輸入標題">
+                </div>
+
+                <div class="cms-toolbar">
+                    <button onclick="execCmd('bold')" title="粗體"><b>B</b></button>
+                    <button onclick="execCmd('italic')" title="斜體"><i>I</i></button>
+                    <button onclick="execCmd('underline')" title="底線"><u>U</u></button>
+                    <button onclick="execCmd('insertUnorderedList')" title="無序列表">• List</button>
+                    <button onclick="execCmd('createLink', prompt('輸入連結 URL:'))" title="連結">🔗</button>
+                    <button onclick="toggleHtmlMode()" id="html-toggle-btn">原始碼模式</button>
+                </div>
+                
+                <div class="cms-editor-container">
+                    <div id="cms-content-editable" contenteditable="true"></div>
+                    <textarea id="cms-content-raw" style="display:none; width:100%; min-height:300px; padding:1rem; font-family:monospace;"></textarea>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem; align-items: center;">
+                    <button id="cms-save-btn" class="btn">發布變更</button>
+                    <button id="cms-preview-btn" class="btn" style="background: var(--secondary-color); border-color: var(--secondary-color);">即時預覽</button>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="cms-member-only" style="width: auto;">
+                        <label for="cms-member-only" style="margin-bottom: 0;">會員限定內容</label>
+                    </div>
+                </div>
+
+                <div id="cms-preview-pane" class="cms-preview-pane" style="display:none;">
+                    <h3>✨ 即時預覽</h3>
+                    <div id="preview-render-area"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2>版本歷史與變更追蹤</h2>
+                <div id="revision-list" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 1rem;">
+                    <p style="color: #888;">選擇文章後查看歷史版本...</p>
+                </div>
+            </section>
+
+            <section>
+                <h2>系統操作日誌</h2>
+                <div id="operation-logs" style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 1rem; background: #f8f9fa;">
+                    <p style="color: #888;">載入日誌中...</p>
+                </div>
+                <button id="clear-logs-btn" style="margin-top: 1rem; color: #dc3545; background: none; border: none; cursor: pointer;">清空日誌 (僅管理員)</button>
+            </section>
+
+            <section id="page-vcs-section">
+                <h2>頁面內容版本管理 (Live Edit)</h2>
+                <div class="form-group">
+                    <label for="page-select">選擇頁面</label>
+                    <select id="page-select" style="width: 100%; padding: 0.8rem; border-radius: 4px; border: 1px solid #ddd;">
+                        <option value="index.html">首頁 (index.html)</option>
+                        <option value="cv.html">個人簡歷 (cv.html)</option>
+                        <option value="skills.html">專業能力 (skills.html)</option>
+                        <option value="investing.html">投資組合 (investing.html)</option>
+                        <option value="booking.html">預約諮詢 (booking.html)</option>
+                    </select>
+                </div>
+                <div id="page-revision-list" style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 1rem;">
+                    <p style="color: #888;">選擇頁面後查看歷史版本...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Chang Hong Wen. CMS 內容管理手冊 v1.0</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // CMS Internal logic that needs direct access to DOM
+        function execCmd(command, value = null) {
+            document.execCommand(command, false, value);
+        }
+
+        let isHtmlMode = false;
+        function toggleHtmlMode() {
+            const editable = document.getElementById('cms-content-editable');
+            const raw = document.getElementById('cms-content-raw');
+            const btn = document.getElementById('html-toggle-btn');
+            
+            isHtmlMode = !isHtmlMode;
+            if (isHtmlMode) {
+                raw.value = editable.innerHTML;
+                editable.style.display = 'none';
+                raw.style.display = 'block';
+                btn.textContent = '返回視覺編輯';
+                btn.style.background = 'var(--accent-color)';
+                btn.style.color = 'white';
+            } else {
+                editable.innerHTML = raw.value;
+                raw.style.display = 'none';
+                editable.style.display = 'block';
+                btn.textContent = '原始碼模式';
+                btn.style.background = '';
+                btn.style.color = '';
+            }
+        }
+    </script>
+</body>
+</html>

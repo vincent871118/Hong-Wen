@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投資組合管理 | 知識分子的隨筆</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">知識分子的隨筆</div>
+            <div class="hamburger">☰</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="cv.html">個人簡歷</a></li>
+                <li><a href="skills.html">專業能力</a></li>
+                <li><a href="investing.html">投資組合與理念</a></li>
+                <li><a href="insights.html">投資週記／見解</a></li>
+                <li><a href="booking.html">預約諮詢</a></li>
+                <li><a href="admin.html">會員管理</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>投資組合管理</h1>
+                <p style="margin-bottom: 2rem; color: #555;">僅限管理員調整。左側為目前投資組合視覺，右側可編輯項目與比例。</p>
+            </div>
+        </section>
+
+        <section>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
+                <div>
+                    <h2>目前投資組合</h2>
+                    <div id="portfolio-pie" style="display:flex; justify-content:center; align-items:center; position: relative; min-height: 360px;"></div>
+                    <div id="pie-legend" style="padding: 1rem; background: var(--white); border: 1px solid var(--border-color); border-radius: 8px; margin-top: 1rem;"></div>
+                </div>
+                <div>
+                    <h2>編輯配置</h2>
+                    <div class="admin-panel" style="margin-top: 0;">
+                        <p style="margin-top: 0; color: #666;">總和需為 100。</p>
+                        <div style="overflow-x: auto; margin-top: 1rem;">
+                            <table class="member-table">
+                                <thead>
+                                    <tr>
+                                        <th>類型</th>
+                                        <th>比例 (%)</th>
+                                        <th>顏色</th>
+                                        <th>特色</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="portfolio-list-body"></tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <button id="portfolio-admin-add" class="btn" style="margin-right: 0.5rem;">新增項目</button>
+                            <button id="portfolio-admin-save" class="btn" style="background-color: var(--secondary-color); margin-right: 0.5rem;">儲存</button>
+                            <button id="portfolio-admin-reset" class="btn" style="background-color: #ffc107; color: #333;">重設為預設</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Chang Hong Wen. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('current_user'));
+            if (!currentUser || currentUser.username !== 'admin') {
+                alert('權限不足，請登入管理員帳號');
+                window.location.href = 'login.html';
+            } else {
+                loadAdminPortfolio();
+                setupPortfolioAdmin();
+            }
+        });
+    </script>
+</body>
+</html>

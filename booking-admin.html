@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>預約管理系統 | 知識分子的隨筆</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">知識分子的隨筆</div>
+            <div class="hamburger">☰</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="cv.html">個人簡歷</a></li>
+                <li><a href="skills.html">專業能力</a></li>
+                <li><a href="investing.html">投資組合與理念</a></li>
+                <li><a href="insights.html">投資週記／見解</a></li>
+                <li><a href="booking.html">預約諮詢</a></li>
+                <li><a href="admin.html">會員管理</a></li>
+                <li><a href="portfolio-admin.html">投資組合管理</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>預約管理系統</h1>
+                <p style="margin-bottom: 1rem; color: #555;">管理並追蹤所有預約：日曆、清單、詳情、篩選、統計與匯出。</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="admin-panel" style="margin-top: 0;">
+                <div style="display:flex; justify-content: space-between; align-items:center; gap: 1rem; flex-wrap: wrap;">
+                    <div class="calendar-toolbar" style="display:flex; gap: 0.5rem; align-items:center;">
+                        <button class="btn" id="cal-prev">←</button>
+                        <div id="cal-title" style="font-weight: 600;"></div>
+                        <button class="btn" id="cal-next">→</button>
+                        <select id="cal-view" class="btn" style="background: var(--white); color: var(--primary-color); border: 1px solid var(--border-color);">
+                            <option value="month">月視圖</option>
+                            <option value="week">週視圖</option>
+                            <option value="day">日視圖</option>
+                        </select>
+                        <button class="btn" id="cal-today">今天</button>
+                    </div>
+                    <div style="display:flex; gap:0.5rem;">
+                        <button class="btn" id="export-csv">匯出 CSV</button>
+                        <button class="btn" id="export-pdf">列印 / PDF</button>
+                    </div>
+                </div>
+                <div id="calendar" class="calendar" style="margin-top: 1rem; min-height: 420px;"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="admin-panel">
+                <div style="display:flex; gap: 1rem; align-items:flex-end; flex-wrap: wrap;">
+                    <div class="form-group" style="margin:0;">
+                        <label>日期範圍（起）</label>
+                        <input type="date" id="filter-start">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>日期範圍（迄）</label>
+                        <input type="date" id="filter-end">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>狀態</label>
+                        <select id="filter-status">
+                            <option value="">全部</option>
+                            <option value="pending">待確認</option>
+                            <option value="confirmed">已確認</option>
+                            <option value="completed">已完成</option>
+                            <option value="cancelled">已取消</option>
+                            <option value="rejected">已拒絕</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>服務類型</label>
+                        <select id="filter-type">
+                            <option value="">全部</option>
+                            <option value="study">升學規劃</option>
+                            <option value="life">生活平衡</option>
+                            <option value="invest">投資交流</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>關鍵字（姓名／Email）</label>
+                        <input type="text" id="filter-q" placeholder="輸入姓名、電話或郵件">
+                    </div>
+                    <button class="btn" id="filter-apply">套用篩選</button>
+                    <button class="btn" id="filter-save" style="background: var(--secondary-color);">儲存篩選</button>
+                </div>
+                <div style="overflow-x:auto; margin-top: 1rem;">
+                    <table class="member-table">
+                        <thead>
+                            <tr>
+                                <th>日期／時間</th>
+                                <th>客戶</th>
+                                <th>類型</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booking-list-body"></tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <button class="btn" id="bulk-confirm">批量確認</button>
+                    <button class="btn" id="bulk-cancel" style="background:#dc3545;">批量取消</button>
+                    <button class="btn" id="bulk-remind" style="background:#ffc107; color:#333;">批量提醒</button>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="admin-panel">
+                <h2>詳細資訊</h2>
+                <div id="detail-panel" style="color: var(--text-color);">
+                    <p>請在日曆或清單中選擇預約項目以查看詳情。</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="admin-panel">
+                <h2>新增／編輯預約</h2>
+                <form id="booking-editor" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; align-items:end;">
+                    <input type="hidden" id="edit-id">
+                    <div class="form-group" style="margin:0;">
+                        <label>客戶姓名</label>
+                        <input type="text" id="edit-name" required>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>電子郵件</label>
+                        <input type="email" id="edit-email" required>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>日期</label>
+                        <input type="date" id="edit-date" required>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>時間</label>
+                        <select id="edit-time" required>
+                            <option value="">請選擇時段</option>
+                            <option>09:00</option><option>10:00</option><option>11:00</option>
+                            <option>14:00</option><option>15:00</option><option>16:00</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>服務類型</label>
+                        <select id="edit-type" required>
+                            <option value="study">升學規劃</option>
+                            <option value="life">生活平衡</option>
+                            <option value="invest">投資交流</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin:0; grid-column: 1 / -1;">
+                        <label>備註</label>
+                        <textarea id="edit-message" placeholder="特殊需求、備註說明"></textarea>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <button class="btn" id="save-booking">儲存</button>
+                        <button class="btn" id="reset-editor" type="reset" style="background:#ffc107; color:#333;">清除</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section>
+            <div class="admin-panel">
+                <h2>統計與報表</h2>
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div id="stat-today" class="card"><h3>今日</h3><div class="stat-value">0</div></div>
+                    <div id="stat-week" class="card"><h3>本週</h3><div class="stat-value">0</div></div>
+                    <div id="stat-month" class="card"><h3>本月</h3><div class="stat-value">0</div></div>
+                </div>
+                <div id="chart-status" style="margin-top:1rem;"></div>
+                <div id="chart-hot" style="margin-top:1rem;"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Chang Hong Wen. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('current_user'));
+            if (!currentUser || currentUser.role !== 'admin') {
+                alert('權限不足，請登入管理員帳號');
+                window.location.href = 'login.html';
+                return;
+            }
+            initBookingAdmin();
+        });
+
+        function initBookingAdmin() {
+            const state = {
+                view: 'month',
+                refDate: new Date(),
+                selectedId: null,
+                selection: new Set()
+            };
+
+            const bookings = () => JSON.parse(localStorage.getItem('site_bookings')) || [];
+            const saveBookings = (list) => localStorage.setItem('site_bookings', JSON.stringify(list));
+
+            const calView = document.getElementById('cal-view');
+            const calPrev = document.getElementById('cal-prev');
+            const calNext = document.getElementById('cal-next');
+            const calToday = document.getElementById('cal-today');
+            const calTitle = document.getElementById('cal-title');
+
+            calView.onchange = (e) => { state.view = e.target.value; renderCalendar(); };
+            calPrev.onclick = () => { shiftRef(-1); };
+            calNext.onclick = () => { shiftRef(1); };
+            calToday.onclick = () => { state.refDate = new Date(); renderCalendar(); };
+
+            function shiftRef(n) {
+                const d = new Date(state.refDate);
+                if (state.view === 'month') d.setMonth(d.getMonth() + n);
+                if (state.view === 'week') d.setDate(d.getDate() + n * 7);
+                if (state.view === 'day') d.setDate(d.getDate() + n);
+                state.refDate = d;
+                renderCalendar();
+            }
+
+            function fmtDate(d) { return d.toISOString().split('T')[0]; }
+            function daySlots() { return ['09:00','10:00','11:00','14:00','15:00','16:00']; }
+
+            function renderCalendar() {
+                const calendar = document.getElementById('calendar');
+                const list = bookings();
+                const now = new Date(state.refDate);
+                const year = now.getFullYear();
+                const month = now.getMonth();
+                calendar.innerHTML = '';
+                if (state.view === 'month') {
+                    calTitle.textContent = `${year} 年 ${month+1} 月`;
+                    const first = new Date(year, month, 1);
+                    const start = new Date(first);
+                    start.setDate(1 - ((first.getDay()+6)%7)); // Monday-start
+                    const grid = document.createElement('div');
+                    grid.style.display = 'grid';
+                    grid.style.gridTemplateColumns = 'repeat(7, 1fr)';
+                    grid.style.gap = '6px';
+                    for (let i=0;i<42;i++) {
+                        const cellDate = new Date(start);
+                        cellDate.setDate(start.getDate()+i);
+                        const cell = document.createElement('div');
+                        cell.className = 'calendar-cell';
+                        cell.setAttribute('data-date', fmtDate(cellDate));
+                        cell.style.minHeight = '100px';
+                        cell.style.border = '1px solid var(--border-color)';
+                        cell.style.background = 'var(--white)';
+                        const head = document.createElement('div');
+                        head.textContent = cellDate.getDate();
+                        head.style.fontSize = '0.85rem';
+                        head.style.color = 'var(--secondary-color)';
+                        head.style.padding = '4px 6px';
+                        cell.appendChild(head);
+                        list.filter(b=>b.date===fmtDate(cellDate)).forEach(b=>{
+                            const item = bookingChip(b);
+                            cell.appendChild(item);
+                        });
+                        // allow drop
+                        cell.ondragover = (e)=>e.preventDefault();
+                        cell.ondrop = (e)=> {
+                            const id = Number(e.dataTransfer.getData('id'));
+                            const l = bookings();
+                            const idx = l.findIndex(x=>x.id===id);
+                            if (idx>-1) {
+                                l[idx].date = cell.getAttribute('data-date');
+                                saveBookings(l);
+                                renderCalendar(); 
+                                window.loadAdminBookings && window.loadAdminBookings();
+                            }
+                        };
+                        grid.appendChild(cell);
+                    }
+                    calendar.appendChild(grid);
+                } else if (state.view === 'week') {
+                    const start = new Date(now);
+                    start.setDate(now.getDate()-((now.getDay()+6)%7));
+                    calTitle.textContent = `${fmtDate(start)} 週`;
+                    const grid = document.createElement('div');
+                    grid.style.display='grid';
+                    grid.style.gridTemplateColumns='repeat(7, 1fr)';
+                    grid.style.gap='6px';
+                    for (let d=0; d<7; d++) {
+                        const day = new Date(start); day.setDate(start.getDate()+d);
+                        const cell = document.createElement('div');
+                        cell.className='calendar-cell';
+                        cell.setAttribute('data-date', fmtDate(day));
+                        const head = document.createElement('div');
+                        head.textContent = `${day.getMonth()+1}/${day.getDate()}`;
+                        head.style.fontSize='0.9rem'; head.style.padding='4px 6px';
+                        cell.appendChild(head);
+                        daySlots().forEach(t=>{
+                            const slot = document.createElement('div');
+                            slot.textContent = t;
+                            slot.style.borderTop='1px dashed var(--border-color)';
+                            slot.style.fontSize='0.8rem';
+                            slot.style.padding='2px 6px';
+                            // render bookings
+                            list.filter(b=>b.date===fmtDate(day)&&b.time===t).forEach(b=>{
+                                const item = bookingChip(b);
+                                slot.appendChild(item);
+                            });
+                            // drop to change time
+                            slot.ondragover=(e)=>e.preventDefault();
+                            slot.ondrop=(e)=>{
+                                const id = Number(e.dataTransfer.getData('id'));
+                                const l = bookings(); const idx = l.findIndex(x=>x.id===id);
+                                if (idx>-1) {
+                                    l[idx].date = fmtDate(day);
+                                    l[idx].time = t;
+                                    saveBookings(l);
+                                    renderCalendar();
+                                    window.loadAdminBookings && window.loadAdminBookings();
+                                }
+                            };
+                            cell.appendChild(slot);
+                        });
+                        cell.style.border='1px solid var(--border-color)';
+                        cell.style.background='var(--white)';
+                        grid.appendChild(cell);
+                    }
+                    calendar.appendChild(grid);
+                } else {
+                    calTitle.textContent = fmtDate(now);
+                    const container = document.createElement('div');
+                    daySlots().forEach(t=>{
+                        const row = document.createElement('div');
+                        row.style.display='flex'; row.style.alignItems='center'; row.style.borderBottom='1px solid var(--border-color)'; row.style.padding='6px';
+                        const label = document.createElement('div'); label.textContent=t; label.style.width='80px'; label.style.color='var(--secondary-color)';
+                        const area = document.createElement('div'); area.style.flex='1';
+                        list.filter(b=>b.date===fmtDate(now)&&b.time===t).forEach(b=>{
+                            const item = bookingChip(b);
+                            area.appendChild(item);
+                        });
+                        area.ondragover=(e)=>e.preventDefault();
+                        area.ondrop=(e)=>{
+                            const id=Number(e.dataTransfer.getData('id')); const l=bookings(); const idx=l.findIndex(x=>x.id===id);
+                            if (idx>-1) { l[idx].date = fmtDate(now); l[idx].time = t; saveBookings(l); renderCalendar(); window.loadAdminBookings && window.loadAdminBookings(); }
+                        };
+                        row.appendChild(label); row.appendChild(area);
+                        container.appendChild(row);
+                    });
+                    calendar.appendChild(container);
+                }
+            }
+
+            function bookingChip(b) {
+                const chip = document.createElement('div');
+                chip.className='booking-chip';
+                chip.draggable = true;
+                chip.style.margin='4px 6px';
+                chip.style.padding='4px 6px';
+                chip.style.borderRadius='4px';
+                chip.style.cursor='grab';
+                const color = statusColor(b.status);
+                chip.style.background = color.bg;
+                chip.style.color = color.fg;
+                chip.textContent = `${b.time || ''} ${b.name} (${mapType(b.type)})`;
+                chip.ondragstart = (e)=> e.dataTransfer.setData('id', String(b.id));
+                chip.onclick = ()=> showDetail(b.id);
+                return chip;
+            }
+
+            function statusColor(st) {
+                switch(st){
+                    case 'pending': return { bg:'#fff3cd', fg:'#856404' };
+                    case 'confirmed': return { bg:'#d4edda', fg:'#155724' };
+                    case 'completed': return { bg:'#cce5ff', fg:'#004085' };
+                    case 'cancelled': return { bg:'#f8d7da', fg:'#721c24' };
+                    case 'rejected': return { bg:'#f8d7da', fg:'#721c24' };
+                    default: return { bg:'var(--light-bg)', fg:'var(--primary-color)' };
+                }
+            }
+            function mapType(t){ return t==='study'?'升學規劃': t==='life'?'生活平衡': '投資交流'; }
+
+            // List and filters
+            document.getElementById('filter-apply').onclick = ()=> { window.loadAdminBookings && window.loadAdminBookings(); };
+            document.getElementById('filter-save').onclick = ()=> {
+                const preset = {
+                    start: document.getElementById('filter-start').value,
+                    end: document.getElementById('filter-end').value,
+                    status: document.getElementById('filter-status').value,
+                    type: document.getElementById('filter-type').value,
+                    q: document.getElementById('filter-q').value
+                };
+                localStorage.setItem('booking_filter_preset', JSON.stringify(preset));
+                alert('篩選條件已儲存');
+            };
+
+            // Bulk actions
+            document.getElementById('bulk-confirm').onclick = ()=> bulkUpdate('confirmed');
+            document.getElementById('bulk-cancel').onclick = ()=> bulkUpdate('cancelled');
+            document.getElementById('bulk-remind').onclick = ()=> bulkRemind();
+
+            function bulkUpdate(status) {
+                const list = bookings().map(b=>{
+                    if (state.selection.has(b.id)) b.status = status;
+                    return b;
+                });
+                saveBookings(list);
+                window.loadAdminBookings && window.loadAdminBookings();
+                renderCalendar();
+                logAction('bulk_update', { status, ids: Array.from(state.selection) });
+            }
+            function bulkRemind() {
+                const list = bookings().filter(b=>state.selection.has(b.id));
+                list.forEach(b=>{
+                    const subject = encodeURIComponent(`預約提醒：${b.date} ${b.time}`);
+                    const body = encodeURIComponent(`您好 ${b.name}，提醒您 ${b.date} ${b.time} 的 ${mapType(b.type)} 預約。`);
+                    window.open(`mailto:${b.email}?subject=${subject}&body=${body}`, '_blank');
+                });
+                logAction('bulk_remind', { ids: Array.from(state.selection) });
+            }
+
+            // Export
+            document.getElementById('export-csv').onclick = ()=> {
+                const rows = [['ID','姓名','Email','日期','時間','類型','狀態','備註']];
+                bookings().forEach(b=> rows.push([b.id,b.name,b.email,b.date,b.time,mapType(b.type),b.status,b.message||'']));
+                const csv = rows.map(r=> r.map(x=> `"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
+                const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href=url; a.download='bookings.csv'; a.click(); URL.revokeObjectURL(url);
+                logAction('export_csv', {});
+            };
+            document.getElementById('export-pdf').onclick = ()=> { window.print(); logAction('export_pdf', {}); };
+
+            // Detail panel
+            function showDetail(id) {
+                const b = bookings().find(x=>x.id===id);
+                if (!b) return;
+                state.selectedId = id;
+                const panel = document.getElementById('detail-panel');
+                panel.innerHTML = `
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <p><strong>客戶：</strong>${escapeHtml(b.name)} (${escapeHtml(b.email)})</p>
+                            <p><strong>服務：</strong>${mapType(b.type)}</p>
+                            <p><strong>時間：</strong>${b.date} ${b.time}</p>
+                            <p><strong>狀態：</strong>${b.status}</p>
+                        </div>
+                        <div>
+                            <p><strong>備註：</strong>${escapeHtml(b.message || '')}</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn" id="btn-confirm">確認</button>
+                        <button class="btn" id="btn-cancel" style="background:#dc3545;">取消</button>
+                        <button class="btn" id="btn-complete" style="background:#2c7be5;">標記完成</button>
+                        <button class="btn" id="btn-remind" style="background:#ffc107; color:#333;">發送提醒</button>
+                        <button class="btn" id="btn-edit" style="background: var(--secondary-color);">載入到編輯器</button>
+                    </div>
+                `;
+                document.getElementById('btn-confirm').onclick = ()=> setStatus(id,'confirmed');
+                document.getElementById('btn-cancel').onclick = ()=> setStatus(id,'cancelled');
+                document.getElementById('btn-complete').onclick = ()=> setStatus(id,'completed');
+                document.getElementById('btn-remind').onclick = ()=> {
+                    const subject = encodeURIComponent(`預約提醒：${b.date} ${b.time}`);
+                    const body = encodeURIComponent(`您好 ${b.name}，提醒您 ${b.date} ${b.time} 的 ${mapType(b.type)} 預約。`);
+                    window.open(`mailto:${b.email}?subject=${subject}&body=${body}`, '_blank');
+                    logAction('remind', { id });
+                };
+                document.getElementById('btn-edit').onclick = ()=> {
+                    document.getElementById('edit-id').value = String(b.id);
+                    document.getElementById('edit-name').value = b.name;
+                    document.getElementById('edit-email').value = b.email;
+                    document.getElementById('edit-date').value = b.date;
+                    document.getElementById('edit-time').value = b.time;
+                    document.getElementById('edit-type').value = b.type;
+                    document.getElementById('edit-message').value = b.message || '';
+                };
+            }
+
+            function setStatus(id, status) {
+                const list = bookings();
+                const idx = list.findIndex(x=>x.id===id);
+                if (idx>-1) {
+                    list[idx].status = status;
+                    saveBookings(list);
+                    window.loadAdminBookings && window.loadAdminBookings();
+                    renderCalendar();
+                    logAction('status_change', { id, status });
+                }
+            }
+
+            // Editor save
+            document.getElementById('save-booking').onclick = (e)=> {
+                e.preventDefault();
+                const idStr = document.getElementById('edit-id').value;
+                const data = {
+                    id: idStr ? Number(idStr) : Date.now(),
+                    name: document.getElementById('edit-name').value.trim(),
+                    email: document.getElementById('edit-email').value.trim(),
+                    date: document.getElementById('edit-date').value,
+                    time: document.getElementById('edit-time').value,
+                    type: document.getElementById('edit-type').value,
+                    message: document.getElementById('edit-message').value.trim(),
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                };
+                // conflict detection
+                const conflict = bookings().find(b=> b.date===data.date && b.time===data.time && b.id !== data.id && b.status!=='rejected' && b.status!=='cancelled');
+                if (conflict) { alert('該時段已有其他預約，請選擇其他時間'); return; }
+                const list = bookings();
+                const idx = list.findIndex(x=>x.id===data.id);
+                if (idx>-1) list[idx] = data; else list.push(data);
+                saveBookings(list);
+                window.loadAdminBookings && window.loadAdminBookings();
+                renderCalendar();
+                logAction(idStr ? 'booking_update' : 'booking_create', { id: data.id });
+                alert('已儲存預約');
+                document.getElementById('booking-editor').reset();
+            };
+
+            // Selection in list for bulk ops
+            window.loadAdminBookings && window.loadAdminBookings();
+            renderCalendar();
+            const tbody = document.getElementById('booking-list-body');
+            const observer = new MutationObserver(()=> attachRowEvents());
+            observer.observe(tbody, { childList: true });
+            function attachRowEvents() {
+                Array.from(tbody.querySelectorAll('tr')).forEach(tr=>{
+                    tr.onclick = ()=>{
+                        const id = Number(tr.getAttribute('data-id'));
+                        if (!id) return;
+                        if (state.selection.has(id)) state.selection.delete(id); else state.selection.add(id);
+                        tr.style.background = state.selection.has(id) ? 'var(--light-bg)' : '';
+                        showDetail(id);
+                    };
+                });
+            }
+
+            // Simple stats
+            function updateStats() {
+                const list = bookings();
+                const todayStr = (new Date()).toISOString().split('T')[0];
+                const weekStart = new Date(); weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
+                const monthStart = new Date(); monthStart.setDate(1);
+                const inRange = (d, start)=> new Date(d.date) >= start;
+                document.querySelector('#stat-today .stat-value').textContent = String(list.filter(b=>b.date===todayStr).length);
+                document.querySelector('#stat-week .stat-value').textContent = String(list.filter(b=>inRange(b,weekStart)).length);
+                document.querySelector('#stat-month .stat-value').textContent = String(list.filter(b=>inRange(b,monthStart)).length);
+                // status distribution chart (simple)
+                const cnt = {pending:0,confirmed:0,completed:0,cancelled:0,rejected:0};
+                list.forEach(b=> { cnt[b.status]=(cnt[b.status]||0)+1; });
+                const chart = document.getElementById('chart-status');
+                chart.innerHTML = Object.entries(cnt).map(([k,v])=> `<div style="display:flex;align-items:center;gap:8px;margin:4px 0;"><span style="width:120px;">${k}</span><div style="height:10px;background:var(--accent-color);width:${v*10}px;"></div><span>${v}</span></div>`).join('');
+                // popular time slots
+                const tcnt = {}; daySlots().forEach(t=> tcnt[t]=0); list.forEach(b=> { tcnt[b.time]=(tcnt[b.time]||0)+1; });
+                const chart2 = document.getElementById('chart-hot');
+                chart2.innerHTML = Object.entries(tcnt).map(([t,v])=> `<div style="display:flex;align-items:center;gap:8px;margin:4px 0;"><span style="width:80px;">${t}</span><div style="height:10px;background:#2c7be5;width:${v*12}px;"></div><span>${v}</span></div>`).join('');
+            }
+            updateStats();
+            window.addEventListener('storage', (e)=> { if (e.key==='site_bookings') { renderCalendar(); window.loadAdminBookings && window.loadAdminBookings(); updateStats(); }});
+
+            function logAction(action, payload) {
+                const logs = JSON.parse(localStorage.getItem('site_logs')) || [];
+                logs.push({ action, payload, at: new Date().toISOString(), by: (JSON.parse(localStorage.getItem('current_user'))||{}).username || 'unknown' });
+                localStorage.setItem('site_logs', JSON.stringify(logs));
+            }
+            function escapeHtml(text) {
+                if (!text) return text;
+                return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+            }
+        }
+    </script>
+</body>
+</html>

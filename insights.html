@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投資週記／見解 | 知識分子的隨筆</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">知識分子的隨筆</div>
+            <div class="hamburger">☰</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="cv.html">個人簡歷</a></li>
+                <li><a href="skills.html">專業能力</a></li>
+                <li><a href="investing.html">投資組合與理念</a></li>
+                <li><a href="insights.html" class="active">投資週記／見解</a></li>
+                <li><a href="booking.html">預約諮詢</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>投資週記／見解</h1>
+                <p style="margin-bottom: 2rem; color: #555;">
+                    定期整理市場觀察與投資思考，沉澱長期價值，避免短期噪音。
+                </p>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="投資週記／見解" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            </div>
+        </section>
+
+        <section id="insights-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem;">
+                <h2 style="border: none; margin: 0; padding: 0;">投資週記 / 見解</h2>
+                <button id="toggle-form-btn" class="btn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">+ 新增文章</button>
+            </div>
+
+            <div id="article-form-container">
+                <h3 style="margin-bottom: 1.5rem;">新增文章</h3>
+                <form id="article-form">
+                    <div class="form-group">
+                        <label for="article-title">標題</label>
+                        <input type="text" id="article-title" required placeholder="請輸入文章標題">
+                    </div>
+                    <div class="form-group">
+                        <label for="article-date">日期</label>
+                        <input type="date" id="article-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="article-content">內容</label>
+                        <textarea id="article-content" required placeholder="請輸入文章內容..."></textarea>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center;">
+                        <input type="checkbox" id="article-member-only" style="width: auto; margin-right: 0.5rem;">
+                        <label for="article-member-only" style="display: inline; margin: 0; cursor: pointer;">會員限定文章 (需登入才能閱讀)</label>
+                    </div>
+                    <div style="text-align: right;">
+                        <button type="button" id="cancel-btn" class="btn" style="background-color: transparent; color: var(--primary-color); border: 1px solid var(--border-color); margin-right: 1rem;">取消</button>
+                        <button type="submit" class="btn">發布文章</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="article-list">
+                <p style="text-align: center; color: #888; padding: 2rem;">載入中...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Chang Hong Wen. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

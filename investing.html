@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投資組合與理念 | 知識分子的隨筆</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">知識分子的隨筆</div>
+            <div class="hamburger">☰</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="cv.html">個人簡歷</a></li>
+                <li><a href="skills.html">專業能力</a></li>
+                <li><a href="investing.html" class="active">投資組合與理念</a></li>
+                <li><a href="insights.html">投資週記／見解</a></li>
+                <li><a href="booking.html">預約諮詢</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>投資組合與理念</h1>
+                <p style="margin-bottom: 2rem; color: #555;">
+                    在投資的世界中，唯有活下來才有機會賺取利潤。<br>
+                    透過深入的研究與長期的持有，在時間的伴隨下持續積累資產。
+                </p>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.pexels.com/photos/6693661/pexels-photo-6693661.jpeg?auto=compress&cs=tinysrgb&w=800" alt="投資理念" loading="lazy" referrerpolicy="no-referrer" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            </div>
+        </section>
+
+        <section>
+            <div class="card-grid">
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h2>投資哲學</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 1rem;">
+                        <div>
+                            <h3 style="color: var(--accent-color);">長期主義</h3>
+                            <p>不追逐短期熱點，專注於趨勢發展與後續展望。時間是優秀企業的朋友。</p>
+                        </div>
+                        <div>
+                            <h3 style="color: var(--accent-color);">風險控制</h3>
+                            <p>永遠將本金安全放在首位。透過資產配置與安全邊際累積較穩定的財富。</p>
+                        </div>
+                        <div>
+                            <h3 style="color: var(--accent-color);">獨立思考</h3>
+                            <p>在市場噪音中保持冷靜，堅持逆向思維，在他人恐懼時貪婪。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>投資組合圓餅圖</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
+                <div id="portfolio-pie" style="display:flex; justify-content:center; align-items:center; position: relative; min-height: 360px;"></div>
+                <div id="pie-legend" style="padding: 1rem; background: var(--white); border: 1px solid var(--border-color); border-radius: 8px;">
+                    <h3 style="margin-top: 0; font-size: 1rem; color: var(--accent-color);">資產配置說明</h3>
+                    <div>載入中...</div>
+                </div>
+            </div>
+            <div id="pie-tooltip" style="position: fixed; padding: 0.5rem 0.75rem; background: rgba(0,0,0,0.75); color: #fff; border-radius: 4px; font-size: 0.9rem; pointer-events: none; display: none;"></div>
+        </section>
+
+        <section>
+            <h2>關注領域</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>傳統金融</h3>
+                    <p>舉凡股票、債券、貴金屬等傳統金融商品。</p>
+                </div>
+                <div class="card">
+                    <h3>區塊鏈技術</h3>
+                    <p>數位世界的新興交易工具，為未來金融業帶來新的可能性。</p>
+                </div>
+                <div class="card">
+                    <h3>實體經濟</h3>
+                    <p>房地產、實體股權、企業投資等實業領域的投資。</p>
+                </div>
+            </div>
+        </section>
+
+        
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Chang Hong Wen. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

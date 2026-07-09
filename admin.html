@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員管理後台 | 知識分子的隨筆</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .member-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .member-table th, .member-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .member-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        .btn-toggle {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">知識分子的隨筆</div>
+            <div class="hamburger">☰</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="cv.html">個人簡歷</a></li>
+                <li><a href="skills.html">專業能力</a></li>
+                <li><a href="investing.html">投資組合與理念</a></li>
+                <li><a href="insights.html">投資週記／見解</a></li>
+                <li><a href="booking.html">預約諮詢</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="admin-dashboard">
+            <h1>管理者控制台</h1>
+            <p style="margin-bottom: 2rem;">僅限管理員存取。介面已簡化為四大核心模組入口。</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>內容管理系統 (CMS)</h3>
+                    <p>專業 WYSIWYG 編輯器、HTML 源碼、版本控制與發布流程管理。</p>
+                    <a href="cms.html" class="btn" style="margin-top: 0.75rem;">前往管理 (CMS)</a>
+                </div>
+                <div class="card">
+                    <h3>會員管理</h3>
+                    <p>查看列表、查詢資料、狀態管理與權限設定。</p>
+                    <a href="admin.html?section=members" class="btn" style="margin-top: 0.75rem;">前往管理</a>
+                </div>
+                <div class="card">
+                    <h3>預約管理</h3>
+                    <p>查看與篩選預約、狀態更新、日程管理。</p>
+                    <a href="booking-admin.html" class="btn" style="margin-top: 0.75rem;">前往管理</a>
+                </div>
+                <div class="card">
+                    <h3>投資組合管理</h3>
+                    <p>總覽配置、明細調整、績效追蹤與報告。</p>
+                    <a href="portfolio-admin.html" class="btn" style="margin-top: 0.75rem;">前往管理</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="members-module" style="display: none;">
+            <h1>會員管理後台</h1>
+            <p style="margin-bottom: 2rem;">僅限管理員存取。在此管理會員帳號與權限。</p>
+
+            <div class="admin-panel">
+                <h2>新增會員</h2>
+                <form id="add-member-form" style="margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end;">
+                    <div class="form-group" style="margin: 0;">
+                        <label for="new-username">帳號</label>
+                        <input type="text" id="new-username" required placeholder="設定帳號">
+                    </div>
+                    <div class="form-group" style="margin: 0;">
+                        <label for="new-password">密碼</label>
+                        <input type="password" id="new-password" required placeholder="設定密碼">
+                    </div>
+                    <button type="submit" class="btn">新增會員</button>
+                </form>
+            </div>
+
+            <div class="admin-panel">
+                <h2>會員列表</h2>
+                <div style="overflow-x: auto; margin-top: 1rem;">
+                    <table class="member-table">
+                        <thead>
+                            <tr>
+                                <th>帳號</th>
+                                <th>建立日期</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="member-list-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+            
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Chang Hong Wen. All rights reserved.</p>
+    </footer>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Inline script to check admin permission immediately
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('current_user'));
+            if (!currentUser || currentUser.username !== 'admin') {
+                alert('權限不足，請登入管理員帳號');
+                window.location.href = 'login.html';
+            } else {
+                // Dashboard or Members module toggle
+                const params = new URLSearchParams(window.location.search);
+                const section = params.get('section');
+                const dashboard = document.getElementById('admin-dashboard');
+                const members = document.getElementById('members-module');
+                if (section === 'members') {
+                    if (dashboard) dashboard.style.display = 'none';
+                    if (members) members.style.display = 'block';
+                    loadMembers();
+                    setupAdminForm();
+                } else {
+                    if (dashboard) dashboard.style.display = 'block';
+                    if (members) members.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

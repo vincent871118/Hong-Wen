@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>預約諮詢 | 知識分子的隨筆</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .booking-form {
+            display: grid;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">知識分子的隨筆</div>
+            <div class="hamburger">☰</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="cv.html">個人簡歷</a></li>
+                <li><a href="skills.html">專業能力</a></li>
+                <li><a href="investing.html">投資組合與理念</a></li>
+                <li><a href="insights.html">投資週記／見解</a></li>
+                <li><a href="booking.html" class="active">預約諮詢</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>預約諮詢</h1>
+                <p style="margin-bottom: 2rem; color: #555;">
+                    如果您有技術顧問、專案合作或投資交流的需求，歡迎透過以下表單預約時間。<br>
+                    我將在 24 小時內回覆您的請求。
+                </p>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="預約諮詢" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            </div>
+        </section>
+
+        <section>
+            <div class="booking-container">
+                <form class="booking-form" id="booking-form-real">
+                    <div class="form-group">
+                        <label for="name">您的姓名</label>
+                        <input type="text" id="name" name="name" required placeholder="請輸入您的姓名">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">電子郵件</label>
+                        <input type="email" id="email" name="email" required placeholder="example@domain.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="booking-date">預約日期</label>
+                        <input type="date" id="booking-date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>選擇時段</label>
+                        <div id="time-slots-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 0.5rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                            <p style="color: #666; grid-column: 1/-1; text-align: center;">請先選擇日期以查看可用時段</p>
+                        </div>
+                        <input type="hidden" id="booking-time" name="time" required>
+                        <p id="time-error" style="color: #dc3545; font-size: 0.85rem; display: none; margin-top: 0.5rem;">請選擇一個時段</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type">諮詢類型</label>
+                        <select id="type" name="type" required>
+                            <option value="">請選擇諮詢類型</option>
+                            <option value="study">升學規劃</option>
+                            <option value="life">生活平衡</option>
+                            <option value="invest">投資交流</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">諮詢內容 / 備註</label>
+                        <textarea id="message" name="message" required placeholder="請簡述您的需求或問題..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; cursor: pointer;">送出預約請求</button>
+                </form>
+            </div>
+        </section>
+
+        <section style="text-align: center;">
+            <h3>直接聯繫</h3>
+            <p style="margin-top: 1rem;">
+                Email: <a href="mailto:vincent.1118.1998@gmail.com">vincent.1118.1998@gmail.com</a><br>
+                Phone: <a href="tel:0905938665">0905938665</a><br>
+                Location: <a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E4%B8%AD%E5%B8%82" target="_blank" rel="noopener">Taichung, Taiwan</a>
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Chang Hong Wen. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

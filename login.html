@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員登入 | 個人專業網站</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">知識分子的隨筆</div>
+            <div class="hamburger">☰</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="cv.html">個人簡歷</a></li>
+                <li><a href="skills.html">專業能力</a></li>
+                <li><a href="investing.html">投資組合與理念</a></li>
+                <li><a href="insights.html">投資週記／見解</a></li>
+                <li><a href="booking.html">預約諮詢</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section style="max-width: 400px; margin: 2rem auto;">
+            <div id="login-container">
+                <h1 style="text-align: center; font-size: 2rem; margin-bottom: 2rem;">會員登入</h1>
+                
+                <!-- Login Form -->
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username">帳號</label>
+                        <input type="text" id="login-username" required placeholder="請輸入帳號">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">密碼</label>
+                        <input type="password" id="login-password" required placeholder="請輸入密碼">
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">登入</button>
+                </form>
+
+                <p style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem; color: #666;">
+                    需要申請會員帳號請聯繫管理員。
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 張鴻文. 版權所有.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
